@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat With Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Función para actualizar la entrada en el formulario izquierdo
+        function updateInput() {
+            const questionType = document.querySelector('input[name="questionType"]:checked').value;
+            const difficulty = document.querySelector('input[name="difficulty"]:checked').value;
+            const count = document.getElementById('questionCount').value;
+
+            const inputField = document.getElementById('prompt');
+            inputField.value = `Generar ${count} preguntas de ${questionType} de nivel ${difficulty}`;
+
+            // Actualizamos el input en la parte inferior del chat
+            const inputFieldBottom = document.getElementById('promptBottom');
+            inputFieldBottom.value = inputField.value;
+        }
+
+        // Función para enviar el formulario desde el botón debajo del chatbox
+        function submitForm() {
+            const form = document.getElementById('chatForm');
+            form.submit();  // Enviar el formulario
+        }
+
+        // Función para actualizar el formulario izquierdo al modificar el input en la parte inferior
+        function syncWithBottomInput() {
+            const bottomInput = document.getElementById('promptBottom').value;
+            const count = bottomInput.match(/\d+/);  // Buscar número de preguntas
+            const questionType = bottomInput.includes("opción múltiple") ? "opción múltiple" : "para completar";
+            const difficulty = bottomInput.includes("fácil") ? "fácil" : bottomInput.includes("intermedio") ? "intermedio" : "difícil";
+
+            // Sincronizamos los valores del formulario
+            if (count) {
+                document.getElementById('questionCount').value = count[0];  // Actualizamos el número de preguntas
+                document.getElementById('countDisplay').textContent = count[0];  // Actualizamos la visualización del número de preguntas
+            }
+
+            // Actualizamos el tipo de pregunta
+            const questionTypeRadio = document.querySelector(`input[name="questionType"][value="${questionType}"]`);
+            if (questionTypeRadio) {
+                questionTypeRadio.checked = true;
+            }
+
+            // Actualizamos el nivel de dificultad
+            const difficultyRadio = document.querySelector(`input[name="difficulty"][value="${difficulty}"]`);
+            if (difficultyRadio) {
+                difficultyRadio.checked = true;
+            }
+
+            updateInput();  // Actualizamos el input principal en el formulario
+        }
+    </script>
+</head>
+<body class="container bg-gray-100 flex min-h-screen mx-auto max-h-screen">
+    <div class="bg-white w-full max-w-7xl shadow-sm flex flex-col lg:flex-row overflow-hidden">
+        <!-- Formulario -->
+        <div class="w-full lg:w-2/5 border-r p-6 bg-gray-50">
+            <img src="https://ucontinental.edu.pe/site/wp-content/themes/salient-child/img/logo.svg" class="w-3/5 pb-4">
+            <form id="chatForm" method="post" action="{{ url_for('chat') }}" class="space-y-6">
+                <!-- Tipo de Pregunta -->
+                <div>
+                    <div class="space-y-2">
+                        <p class="font-semibold text-blue-600">Tipo de Pregunta:</p>
+                        <label class="flex items-center px-2">
+                            <input type="radio" name="questionType" value="opción múltiple" onchange="updateInput()" checked class="mr-2">Opción Múltiple
+                        </label>
+                        <label class="flex items-center px-2">
+                            <input type="radio" name="questionType" value="para completar" onchange="updateInput()" class="mr-2">Para Completar
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Nivel de Preguntas -->
+                <div>
+                    <div class="space-y-2">
+                        <p class="font-semibold text-blue-600">Nivel de Preguntas:</p>
+                        <label class="flex items-center px-2">
+                            <input type="radio" name="difficulty" value="fácil" onchange="updateInput()" checked class="mr-2">Fácil
+                        </label>
+                        <label class="flex items-center px-2">
+                            <input type="radio" name="difficulty" value="intermedio" onchange="updateInput()" class="mr-2">Intermedio
+                        </label>
+                        <label class="flex items-center px-2">
+                            <input type="radio" name="difficulty" value="difícil" onchange="updateInput()" class="mr-2">Difícil
+                        </label>
+                        <label class="flex items-center px-2">
+                            <input type="radio" name="difficulty" value="fácil a difícil" onchange="updateInput()" class="mr-2">Fácil a Difícil
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Número de Preguntas -->
+                <div>
+                    <div class="flex items-center space-x-4">
+                        <label class="block font-semibold text-blue-600 mb-2" for="questionCount">Preguntas:</label>
+                        <input type="range" id="questionCount" name="questionCount" min="1" max="20" value="5" class="w-full" onchange="updateInput()">
+                        <span id="countDisplay" class="font-semibold">5</span>
+                    </div>
+                </div>
+                {% set sizeClass = "text-4xl" %}
+                {% set colorClass = "text-blue-600" %}
+                {% include 'components/title.html' %}                
+                
+                <div>
+                    <input type="text" id="prompt" name="prompt" value="Generar 5 preguntas de opción múltiple de nivel fácil" required class="w-full p-2 border border-gray-300 rounded-lg hidden">
+                </div>
+
+                <!-- Botón Enviar (Este solo para no causar conflicto) -->
+                <div>
+                    <button type="submit" class="hidden"></button> <!-- Botón invisible para enviar si es necesario -->
+                </div>
+            </form>
+        </div>
+
+        <!-- Sección del Chat -->
+        <!-- Chat Box Section -->
+        <div class="w-full lg:w-2/3 p-6 flex flex-col">
+            {% if prompt %}
+            <div class="overflow-y-auto border-t pt-4 h-[90%]">
+                <h2 class="font-bold text-xl text-gray-700 mb-2">Tu pregunta:</h2>
+                <p class="bg-gray-100 p-4 rounded-md font-semibold">{{ prompt }}</p>
+        
+                <h2 class="font-bold text-xl text-gray-700 mt-4">Respuesta:</h2>
+                {% if response %}
+                    <ul class="list-disc pl-5 space-y-2">
+                        {% for line in response.split('\n') %}
+                            {% if line.startswith('Multiple-Choice Questions:') %}
+                                <li class="font-bold">Multiple-Choice Questions:</li>
+                            {% elif line.startswith('Fill-in-the-Blank Questions:') %}
+                                <li class="font-bold">Fill-in-the-Blank Questions:</li>
+                            {% elif line.strip() %}
+                                <li>{{ line }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-red-500">No response available.</p>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="overflow-y-auto border-t flex flex-col justify-center items-center pt-4 h-[90%]">
+                <h2 class="font-bold text-xl text-gray-700 mb-2">Bienvenido!</h2>
+                <p class="p-4 font-normal">¡Estamos listos para iniciar!</p>
+            </div>
+        {% endif %}
+        
+            <!-- Duplicado del Input de Pregunta Generada debajo del chatbox -->
+            <div class="mt-4 flex items-center space-x-4">
+                <input type="text" id="promptBottom" name="promptBottom" value="Generar 5 preguntas de opción múltiple de nivel fácil" required class="w-full p-2 border border-gray-300 rounded-lg" onchange="syncWithBottomInput()">
+                <button type="button" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold" onclick="submitForm()">Iniciar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const slider = document.getElementById('questionCount');
+        const display = document.getElementById('countDisplay');
+
+        slider.addEventListener('input', () => {
+            display.textContent = slider.value;
+            updateInput();
+        });
+    </script>
+</body>
+</html>
