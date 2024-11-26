@@ -52,6 +52,12 @@
                         <span id="countDisplay" class="font-semibold">5</span>
                     </div>
                 </div>
+                <!-- Checkbox para retroalimentación -->
+                <div class="flex items-center mt-4">
+                    <input type="checkbox" id="feedbackCheckbox" class="mr-2" onchange="updateInput()">
+                    <label for="feedbackCheckbox" class="font-semibold text-blue-600">Incluir retroalimentación</label>
+                </div>
+
                 {% set sizeClass = "text-4xl" %}
                 {% set colorClass = "text-blue-600" %}
                 {% include 'components/title.html' %}                

@@ -3,9 +3,13 @@ function updateInput() {
     const questionType = document.querySelector('input[name="questionType"]:checked').value;
     const difficulty = document.querySelector('input[name="difficulty"]:checked').value;
     const count = document.getElementById('questionCount').value;
+    const feedbackChecked = document.getElementById('feedbackCheckbox').checked;
 
     const inputField = document.getElementById('prompt');
-    inputField.value = `Generar ${count} preguntas de ${questionType} de nivel ${difficulty}`;
+    const feedbackText = feedbackChecked ? " más su retroalimentación" : "";
+
+    // inputField.value = `Quein mato a atahuallpa`;
+    inputField.value = `Generar ${count} preguntas de ${questionType} de nivel ${difficulty}${feedbackText}`;
 
     // Actualizamos el input en la parte inferior del chat
     const inputFieldBottom = document.getElementById('promptBottom');
