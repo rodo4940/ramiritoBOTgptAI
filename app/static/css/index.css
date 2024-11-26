@@ -1,0 +1,116 @@
+/* Animación para hacer zoom y cambiar color del título */
+@keyframes zoomOut {
+    0% {
+        transform: scale(10);
+        opacity: 0;
+        color: rebeccapurple;
+    }
+    50% {
+        opacity: 1;
+        color: plum;
+    }
+    70% {
+        transform: scale(1);
+        opacity: 1;
+        color: gold;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+        color: lightskyblue;
+        font-weight: 500;
+    }
+}
+
+/* Animación para mover y rotar el emoji */
+@keyframes moveDownRotate {
+    0% {
+        transform: translateY(-1000px) rotate(-720deg); /* Comienza desde arriba y rotando */
+        opacity: 0;
+    }
+    50% {
+        transform: translateY(250px) rotate(180deg); /* En el medio, ya en su posición pero rotando */
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0) rotate(360deg); /* Llega a su lugar final, con rotación completa */
+        opacity: 1;
+    }
+}
+
+/* Animación para mover el texto y emoji hacia arriba y reducir su tamaño */
+@keyframes moveUpResize {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(-150px) scale(0.5);
+    }
+}
+
+/* Animación para mostrar el formulario */
+@keyframes showForm {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Estilos para las partículas (emoji) */
+.particle {
+    position: absolute;
+    font-size: 2rem; /* Tamaño del emoji */
+    animation: particleAnimation 2s ease-out forwards;
+}
+
+@keyframes particleAnimation {
+    0% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--x), var(--y));
+        opacity: 0;
+    }
+}
+
+/* Animación para el botón desaparecer */
+@keyframes hideButton {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+}
+
+/* Aplicando animaciones con Tailwind */
+.animate-zoomOut {
+    animation: zoomOut 2s ease-out forwards;
+}
+
+.animate-moveDownRotate {
+    animation: moveDownRotate 2s ease-out forwards;
+}
+
+.animate-delay-2000 {
+    animation-delay: 2s;
+}
+
+h1.animate-moveUpResize {
+    animation: moveUpResize 1s ease forwards;
+    color: darkseagreen;
+}
+
+.animate-showForm {
+    animation: showForm 1s ease forwards;
+}
+
+.animate-hideButton {
+    animation: hideButton 1s ease forwards;
+}

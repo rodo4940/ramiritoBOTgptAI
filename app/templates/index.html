@@ -4,133 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RamiritoBOT</title>
+    <link rel="stylesheet" href="../static/css/index.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Animación para hacer zoom y cambiar color del título */
-        @keyframes zoomOut {
-            0% {
-                transform: scale(10);
-                opacity: 0;
-                color: rebeccapurple;
-            }
-            50% {
-                opacity: 1;
-                color: plum;
-            }
-            70% {
-                transform: scale(1);
-                opacity: 1;
-                color: gold;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-                color: beige;
-                font-weight: 500;
-            }
-        }
-
-        /* Animación para mover y rotar el emoji */
-        @keyframes moveDownRotate {
-            0% {
-                transform: translateY(-1000px) rotate(-720deg); /* Comienza desde arriba y rotando */
-                opacity: 0;
-            }
-            50% {
-                transform: translateY(250px) rotate(180deg); /* En el medio, ya en su posición pero rotando */
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(0) rotate(360deg); /* Llega a su lugar final, con rotación completa */
-                opacity: 1;
-            }
-        }
-
-        /* Animación para mover el texto y emoji hacia arriba y reducir su tamaño */
-        @keyframes moveUpResize {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(-150px) scale(0.5);
-            }
-        }
-
-        /* Animación para mostrar el formulario */
-        @keyframes showForm {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
-        /* Estilos para las partículas (emoji) */
-        .particle {
-            position: absolute;
-            font-size: 2rem; /* Tamaño del emoji */
-            animation: particleAnimation 2s ease-out forwards;
-        }
-
-        @keyframes particleAnimation {
-            0% {
-                transform: translate(0, 0);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--x), var(--y));
-                opacity: 0;
-            }
-        }
-
-        /* Animación para el botón desaparecer */
-        @keyframes hideButton {
-            0% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-                transform: scale(0);
-            }
-        }
-
-        /* Aplicando animaciones con Tailwind */
-        .animate-zoomOut {
-            animation: zoomOut 2s ease-out forwards;
-        }
-
-        .animate-moveDownRotate {
-            animation: moveDownRotate 2s ease-out forwards;
-        }
-
-        .animate-delay-2000 {
-            animation-delay: 2s;
-        }
-
-        h1.animate-moveUpResize {
-            animation: moveUpResize 1s ease forwards;
-            color: darkseagreen;
-        }
-
-        .animate-showForm {
-            animation: showForm 1s ease forwards;
-        }
-
-        .animate-hideButton {
-            animation: hideButton 1s ease forwards;
-        }
-    </style>
 </head>
 <body class="bg-gray-900 h-screen flex justify-center items-center overflow-hidden">
     {% set sizeClass = "text-9xl" %}
     {% include 'components/title.html' %}
-    <!-- <h1 class="text-white text-9xl flex items-center gap-5 transform scale-100 opacity-0 animate-zoomOut">
-        RamiritoBOT
-        <span class="emoji opacity-0 animate-moveDownRotate animate-delay-2000">🤖</span>
-    </h1> -->
     <button id="showFormBtn" class="absolute bottom-28 text-white bg-blue-500 hover:bg-blue-700 px-6 py-2 rounded-lg shadow-lg text-2xl">
         Comencemos
     </button>
@@ -144,79 +23,13 @@
                 <button type="submit" class="text-white bg-green-500 hover:bg-green-700 px-7 py-3 rounded-lg">Procesar Documento</button>
             </form>
             {% if upload_error %}
-                <p class="error text-red-500 mt-4">{{ upload_error }}</p>
+            <p class="error text-red-500 mt-4">{{ upload_error }}</p>
             {% endif %}
             {% if upload_success %}
-                <p class="success text-green-500 mt-4">Document uploaded successfully!</p>
+            <p class="success text-green-500 mt-4">Document uploaded successfully!</p>
             {% endif %}
         </div>
     </div>
-
-    <script>
-        const showFormBtn = document.getElementById("showFormBtn");
-        const formContainer = document.getElementById("formContainer");
-        const h1 = document.querySelector("h1");
-        const emoji = document.querySelector(".emoji");
-
-        showFormBtn.addEventListener("click", (event) => {
-            // Ocultar el botón con animación
-            showFormBtn.classList.add("animate-hideButton");
-            
-            // Animación para mover el título y emoji juntos y reducir su tamaño
-            h1.classList.add("animate-moveUpResize");
-            
-            // Animación para mover el emoji desde arriba y rotar
-            emoji.classList.add("animate-moveDownRotate");
-
-            // Mostrar el formulario con animación
-            formContainer.classList.remove("hidden");
-            formContainer.classList.add("animate-showForm");
-
-            // Efecto de partículas (emoji) expandido con colores aleatorios
-            generateParticles(event);
-        });
-
-        function generateParticles(event) {
-            const numParticles = 200; // Aumentar el número de partículas para mayor cobertura
-            const spreadRange = 1500; // Aumentar el rango de dispersión para cubrir más espacio
-            for (let i = 0; i < numParticles; i++) {
-                const particle = document.createElement('span');
-                particle.classList.add('particle');
-                particle.textContent = "😍";  // Emoji de partícula
-
-                // Asignación de un color aleatorio para cada partícula
-                const randomColor = getRandomColor();
-                particle.style.color = randomColor; // Cambia el color del emoji
-
-                // Posición aleatoria en un rango más amplio
-                const x = Math.random() * spreadRange - spreadRange / 2;
-                const y = Math.random() * spreadRange - spreadRange / 2;
-
-                particle.style.setProperty('--x', `${x}px`);
-                particle.style.setProperty('--y', `${y}px`);
-
-                // Coloca la partícula en la posición del botón
-                particle.style.left = `${event.clientX - 10}px`;
-                particle.style.top = `${event.clientY - 10}px`;
-
-                document.body.appendChild(particle);
-
-                // Elimina la partícula después de la animación
-                setTimeout(() => {
-                    particle.remove();
-                }, 2000); // Cambiar la duración para hacer que desaparezca más lentamente
-            }
-        }
-
-        // Función para generar colores aleatorios
-        function getRandomColor() {
-            const letters = '0123456789ABCDEF';
-            let color = '#';
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        }
-    </script>
+    <script src="../static/js/index.js"></script>
 </body>
 </html>

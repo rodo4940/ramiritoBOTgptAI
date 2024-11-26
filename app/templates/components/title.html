@@ -1,11 +1,10 @@
-<h1 class="flex items-center gap-5 transform scale-100 opacity-0 animate-zoomOut {{ sizeClass | default('text-9xl') }} {{ colorClass | default('text-white') }}">
+<h1 class="title flex items-center gap-5 opacity-0 animate-zoomOut {{ sizeClass }} ">
     RamiritoBOT
     <span class="emoji opacity-0 animate-moveDownRotate animate-delay-2000 {{ emojiClass }}">🤖</span>
 </h1>
 
-
 <style>
-    /* Animación para hacer zoom y cambiar color del título */
+    /* Animaciones para el título */
     @keyframes zoomOut {
         0% {
             transform: scale(10);
@@ -25,10 +24,11 @@
             transform: scale(1);
             opacity: 1;
             font-weight: 500;
+            color: mediumturquoise;
         }
     }
 
-    /* Animación para mover y rotar el emoji */
+    /* Animaciones para el emoji */
     @keyframes moveDownRotate {
         0% {
             transform: translateY(-1000px) rotate(-720deg);
@@ -44,13 +44,14 @@
         }
     }
 
-    /* Estilos para las partículas (emoji) */
+    /* Clase para partículas */
     .particle {
         position: absolute;
         font-size: 2rem;
         animation: particleAnimation 2s ease-out forwards;
     }
 
+    /* Animación de partículas */
     @keyframes particleAnimation {
         0% {
             transform: translate(0, 0);
@@ -62,7 +63,7 @@
         }
     }
 
-    /* Animaciones de Tailwind */
+    /* Clases reutilizables para animaciones */
     .animate-zoomOut {
         animation: zoomOut 2s ease-out forwards;
     }
@@ -70,9 +71,4 @@
     .animate-moveDownRotate {
         animation: moveDownRotate 2s ease-out forwards;
     }
-
 </style>
-
-<script>
-    // Aquí puedes incluir el JavaScript necesario si se requiere
-</script>
