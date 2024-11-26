@@ -45,3 +45,12 @@ function syncWithBottomInput() {
 
     updateInput();  // Actualizamos el input principal en el formulario
 }
+
+// Para manejar selector de cantidad de preguntas
+const slider = document.getElementById('questionCount');
+const display = document.getElementById('countDisplay');
+
+slider.addEventListener('input', () => {
+    display.textContent = slider.value;
+    updateInput();
+});

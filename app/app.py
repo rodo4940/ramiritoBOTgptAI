@@ -1,10 +1,8 @@
 from flask import Flask, render_template, request
-from dotenv import load_dotenv
-from llama_index.core import VectorStoreIndex, ServiceContext, Document
+from llama_index.core import VectorStoreIndex
 from llama_index.llms.openai import OpenAI
 from llama_index.core import SimpleDirectoryReader
 import openai
-import pypdf
 import os
 import time
 
@@ -17,11 +15,10 @@ def read_data():
     docs = reader.load_data()
 
     # Configuración del modelo sin `ServiceContext`
-    # llm = OpenAI(model="gpt-3.5-turbo", temperature=0.5, system_prompt="You are an expert on the docs and can provide helpful summaries")
     llm = OpenAI(
         model="gpt-3.5-turbo",
         temperature=0.5,
-        system_prompt = (
+        system_prompt=(
             "Eres un asistente diseñado para generar preguntas de opción múltiple o de completar espacios basadas exclusivamente en el contenido del documento subido. "
             "Tu tarea es analizar el texto del archivo y generar preguntas sobre el contenido que se encuentra dentro de él. "
             "Instrucciones: "
@@ -33,7 +30,6 @@ def read_data():
             "6. Si la información en el documento no es suficiente para generar preguntas relevantes, responde educadamente: 'No puedo generar preguntas basadas en el contenido del archivo. Por favor, pregunte sobre su contenido.'"
             "Tu objetivo es generar preguntas claras, precisas y directamente relacionadas con el contenido del documento subido."
         )
-
     )
 
     # Crear el índice
