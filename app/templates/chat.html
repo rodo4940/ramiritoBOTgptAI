@@ -74,30 +74,23 @@
             <div class="overflow-y-auto border-t pt-4 h-[90%]">
                 <h2 class="font-bold text-xl text-gray-700 mb-2">Tu pregunta:</h2>
                 <p class="bg-gray-100 p-4 rounded-md font-semibold">{{ prompt }}</p>
-        
+            
                 <h2 class="font-bold text-xl text-gray-700 mt-4">Respuesta:</h2>
                 {% if response %}
-                    <ul class="list-disc pl-5 space-y-2">
-                        {% for line in response.split('\n') %}
-                            {% if line.startswith('Multiple-Choice Questions:') %}
-                                <li class="font-bold">Multiple-Choice Questions:</li>
-                            {% elif line.startswith('Fill-in-the-Blank Questions:') %}
-                                <li class="font-bold">Fill-in-the-Blank Questions:</li>
-                            {% elif line.strip() %}
-                                <li>{{ line }}</li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
+                    <!-- Mostrar la respuesta ya formateada -->
+                    <div class="space-y-2">
+                        {{ response | safe }}
+                    </div>
                 {% else %}
                     <p class="text-red-500">No response available.</p>
                 {% endif %}
             </div>
-        {% else %}
-            <div class="overflow-y-auto border-t flex flex-col justify-center items-center pt-4 h-[90%]">
-                <h2 class="font-bold text-xl text-gray-700 mb-2">Bienvenido!</h2>
-                <p class="p-4 font-normal">¡Estamos listos para iniciar!</p>
-            </div>
-        {% endif %}
+            {% else %}
+                <div class="overflow-y-auto border-t flex flex-col justify-center items-center pt-4 h-[90%]">
+                    <h2 class="font-bold text-xl text-gray-700 mb-2">Bienvenido!</h2>
+                    <p class="p-4 font-normal">¡Estamos listos para iniciar!</p>
+                </div>
+            {% endif %}
         
             <!-- Duplicado del Input de Pregunta Generada debajo del chatbox -->
             <div class="mt-4 flex items-center space-x-4">

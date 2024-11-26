@@ -3,6 +3,7 @@ from llama_index.core import VectorStoreIndex
 from llama_index.llms.openai import OpenAI
 from llama_index.core import SimpleDirectoryReader
 import openai
+import re
 import os
 import time
 
@@ -83,10 +84,39 @@ def chat():
         prompt = request.form['prompt']
         try:
             response = chat_engine.chat(prompt)
-            return render_template('chat.html', prompt=prompt, response=response.response)
+            formatted_response = format_response(response.response)
+            return render_template('chat.html', prompt=prompt, response=formatted_response)
         except Exception as e:
             print(f"Error occurred: {e}")
             return render_template('chat.html', prompt=prompt, response="An error occurred, please try again later.")
+
+def format_response(response_text):
+    # Usar expresiones regulares para detectar preguntas y respuestas.
+    formatted_text = ""
+    
+    # Detectar preguntas (terminadas en ?)
+    question_pattern = r"([A-Za-z0-9\s,;:¿?]+[?])"
+    
+    # Detectar las opciones de respuesta A), B), C), D)
+    answer_pattern = r"([A-D]\)\s.*)"
+    
+    # Dividir el texto de la respuesta
+    for line in response_text.split("\n"):
+        question_match = re.match(question_pattern, line.strip())
+        answer_match = re.match(answer_pattern, line.strip())
+        
+        # Si es una pregunta, la hacemos negrita
+        if question_match:
+            formatted_text += f"<p ><strong>{question_match.group(0).strip()}</strong></p>\n"
+        # Si es una respuesta, la indentamos un poco
+        elif answer_match:
+            formatted_text += f"<p class='ml-6'>{answer_match.group(0).strip()}</p>\n"
+        # Si es cualquier otra línea, la dejamos tal cual
+        elif line.strip():
+            formatted_text += f"<p>{line.strip()}</p>\n"
+    
+    return formatted_text
+
     
 if __name__ == '__main__':
     app.run(debug=True)
