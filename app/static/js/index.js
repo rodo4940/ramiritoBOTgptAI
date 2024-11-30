@@ -20,7 +20,7 @@ showFormBtn.addEventListener("click", (event) => {
     // Efecto de partículas (emoji) expandido con colores aleatorios
     generateParticles(event);
 });
-let showEmoji = false; // Puedes cambiarlo a `false` si prefieres círculos en lugar de emoji
+let showEmoji = true; // Puedes cambiarlo a `false` si prefieres círculos en lugar de emoji
 
 function generateParticles(event) {
     const numParticles = 200; // Aumentar el número de partículas para mayor cobertura
@@ -31,7 +31,7 @@ function generateParticles(event) {
 
         // Si showEmoji es verdadero, mostramos un emoji
         if (showEmoji) {
-            particle.textContent = "😍";  // Emoji de partícula
+            particle.textContent = "🤖";  // Emoji de partícula
         } else {
             // Si no es emoji, mostramos un círculo redondeado
             particle.style.backgroundColor = getRandomColor();  // Color aleatorio para el círculo

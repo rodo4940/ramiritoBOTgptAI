@@ -73,7 +73,7 @@ def format_response(response_text):
                 line = line.replace(keyword, f"<span class='text-red-500'>{keyword}</span>")
 
         question_match = re.match(question_pattern, line.strip())
-        answer_match = re.match(answer_pattern, line.strip())
+        answer_match = re.match(answer_pattern, line.strip())  
 
         if question_match:
             formatted_text += f"<p><strong>{question_match.group(0).strip()}</strong></p>\n"
@@ -83,8 +83,6 @@ def format_response(response_text):
             formatted_text += f"<p>{line.strip()}</p>\n"
     
     return formatted_text
-
-
 
 # Ruta principal
 @app.route('/')
